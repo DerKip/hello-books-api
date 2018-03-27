@@ -22,5 +22,9 @@ class Books():
         self.edition=None
         self.publisher=None
 
-    # def display_books():
-    #     return(Book.books)
+    def get_book_by_id(bookid):
+        """Searches for one book in the list"""
+        for book in Books.books:
+            if book.book_id is bookid:
+                return book
+        return "Books is not listed"
