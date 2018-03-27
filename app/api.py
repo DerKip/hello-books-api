@@ -37,10 +37,12 @@ def retrive_all_books():
     """displays all books in book list"""
     return jsonify({'books':Books.books})
 
-@app.route('/api/books/<bookId>',methods=['GET'])
-def get_a_books():
-    return jsonify({'books':Books.books})
-
+@app.route('/api/books/<bookid>',methods=['GET'])
+def get_a_books(bookid):
+    """endpoint for finding a particular book"""
+    book_searched=Books.get_book_by_id(bookid)
+    return jsonify({'result':book_searched})
+    
 @app.route('/api/users/books/<bookId>',methods=['POST'])
 def borrow_book():
     return ''
