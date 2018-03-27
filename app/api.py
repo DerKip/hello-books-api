@@ -1,8 +1,8 @@
-from flask import Flask,request,jsonify
+from flask import Flask,request,jsonify,abort
 from flask_api import FlaskAPI
 import uuid #generates random public id
 from werkzeug.security import generate_password_hash, check_password_hash
-from classes import User
+from classes import *
 
 app=Flask(__name__)
 
@@ -11,7 +11,16 @@ app.config['SECRET_KEY']='siri'
 
 @app.route('/book',methods=['POST'])
 def add_a_book():
-    return ''
+    """"""
+    data=request.get_json()
+    new_book=Books()
+    new_book.book_id=str(uuid.uuid1())
+    new_book.book_title=data['title']
+    new_book.edition=data['edition']
+    new_book.author=data['author']
+    new_book.publisher=data['publisher']
+    return jsonify(new_book.__dict__) 
+
 
 @app.route('/api/books/<bookId>',methods=['PUT'])
 def modify_book():
@@ -41,6 +50,7 @@ def create_user():
     new_user.admin=False
     # response.status_code = 201
     return jsonify(new_user.__dict__)
+
 
 @app.route('/api/auth/login',methods=['POST'])
 def login():
