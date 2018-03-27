@@ -11,7 +11,7 @@ app.config['SECRET_KEY']='siri'
 
 @app.route('/book',methods=['POST'])
 def add_a_book():
-    """"""
+    """adds a book to books"""
     data=request.get_json()
     new_book=Books()
     new_book.book_id=str(uuid.uuid1())
@@ -19,7 +19,9 @@ def add_a_book():
     new_book.edition=data['edition']
     new_book.author=data['author']
     new_book.publisher=data['publisher']
-    return jsonify(new_book.__dict__) 
+    book_data=new_book.__dict__
+    Books.books.append(book_data)
+    return jsonify(book_data) 
 
 
 @app.route('/api/books/<bookId>',methods=['PUT'])
@@ -30,9 +32,14 @@ def modify_book():
 def remove_a_book():
     return ''
 
+@app.route('/api/books/',methods=['GET'])
+def retrive_all_books():
+    """displays all books in book list"""
+    return jsonify({'books':Books.books})
+
 @app.route('/api/books/<bookId>',methods=['GET'])
-def get_books():
-    return ''
+def get_a_books():
+    return jsonify({'books':Books.books})
 
 @app.route('/api/users/books/<bookId>',methods=['POST'])
 def borrow_book():
@@ -48,7 +55,8 @@ def create_user():
     new_user.name=data['name']
     new_user.password=hashed_password
     new_user.admin=False
-    # response.status_code = 201
+    user_data=(new_user.__dict__)
+    User.users.append(user_data)
     return jsonify(new_user.__dict__)
 
 
